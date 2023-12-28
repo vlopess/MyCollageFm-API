@@ -1,7 +1,7 @@
 import json
 from flask import Flask, jsonify, request, send_file
 
-from business import createImg, downloadImg
+from business import createImg, deleteFilesRequest, downloadImg
 from model import Model
 
 app = Flask(__name__)
@@ -11,9 +11,10 @@ def generateCollage():
     dados = request.form['data']
     dados = Model.from_map(json.loads(dados))
     downloadImg(dados)
-    createImg(dados)
-    response = {'message': 'ok'}
-    return jsonify(response), 200
+    filename = createImg(dados)
+    file = send_file(filename)
+    deleteFilesRequest(dados.id)
+    return file, 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
