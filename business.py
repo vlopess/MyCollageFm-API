@@ -21,7 +21,6 @@ def downloadImg(model: Model):
     
 def getFontSize(lenght, size):
     x = 0 if size == 300 else 2.5 if size == 375 else 6.5
-    print(x)
     if(lenght < 35): 
         return x + 20
     if(lenght < 45): 
@@ -34,11 +33,7 @@ def getFontSize(lenght, size):
     return x + 10
 
 def createImg(model: Model):
-    #downloadImg()
-    # 5x5 = 300
-    # 4x4 = 375
-    # 3x3 = 500
-    size = 500
+    size = getSize(model.size)
     new = Image.new("RGBA", (1500,1500))
     c = 0
     for i in range(0,1500,size):
@@ -59,11 +54,25 @@ def createImg(model: Model):
             left, top, right, bottom  = I1.textbbox(position,text,font=font)
             I1.rectangle((left-5, top-5, right+5, bottom+5), fill="black")
             I1.text(position, text, font=font,fill =(255, 255, 255),align="center"),             
-            new.paste(img, (i,j))            
-    new.save("temporary/collage.png")
-    return "temporary/collage.png"
+            new.paste(img, (j,i))            
+    filename = "temporary/{}_collage.png".format(model.id)
+    new.save(filename)
+    return filename
 
-def removeImg():
-    os.remove('temporary/collage.png')
+def getSize(size):
+    if size == 3: return 500
+    if size == 4: return 375
+    if size == 5: return 300
+
+def deleteFilesRequest(id : int):
+    cwd = os.getcwd()
+    path = '{}/{}'.format(cwd, 'temporary')
+    arr = os.listdir(path)
+    for file in arr:
+        fileID = file.split('_')
+        if id == fileID[0]:
+            filePath = '{}/{}'.format(path, file)
+            os.remove(filePath)
+        
 
 
