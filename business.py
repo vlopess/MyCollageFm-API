@@ -87,5 +87,3 @@ def deleteFilesRequest(id : int):
             filePath = '{}/{}'.format(path, file)
             os.remove(filePath)
 
-createImg()
-

@@ -3,8 +3,12 @@ from flask import Flask, jsonify, request, send_file
 
 from business import createImg, deleteFilesRequest, downloadImg
 from model import Model
+from werkzeug.serving import run_simple
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
+app.config["APPLICATION_ROOT"] = "/api/v1"
+app.wsgi_app = DispatcherMiddleware(app, {'/api/v1': app.wsgi_app})
 
 @app.route('/generateCollage', methods=['POST'])
 def generateCollage():       
