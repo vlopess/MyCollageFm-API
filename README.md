@@ -14,7 +14,7 @@ Esse projeto foi desenvolvido utilizando as seguintes tecnologias:
 ## Demonstração
 
 
-## Documetação
+## Documentação
 
 
 ## Feedback
