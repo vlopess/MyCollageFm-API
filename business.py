@@ -9,17 +9,17 @@ from cell import Cell
 
 from model import Model
 
-#def downloadImg(model: Model):
-def downloadImg():
+def downloadImg(model: Model):
+#def downloadImg():
     c = 0
-    #urlList = model.cellList
+    urlList = model.cellList
     cwd = os.getcwd()
-    partialpath = '{}/{}'.format(cwd, 'temporary')
-    for j in range(0, 25):
-        #image_url = urlList[j].urlImage
-        image_url = 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png'
+    partialpath = '{}/mysite/{}'.format(cwd, 'temporary')
+    len = model.size * model.size
+    for j in range(0, len):
+        image_url = urlList[j].urlImage
         img_data = requests.get(image_url).content
-        path = partialpath + '/{}_{}.jpg'.format('teste',c)
+        path = partialpath + '/{}_{}.jpg'.format(model.id,c)
         with open(path, 'wb') as handler:
             handler.write(img_data)
         c = c + 1
@@ -38,25 +38,22 @@ def getFontSize(lenght, size):
         return x + 7.5
     return x + 4
 
-#def createImg(model: Model):
-def createImg():
-    size = getSize(3)
+def createImg(model: Model):
+    size = getSize(model.size)
     new = Image.new("RGB", (1200,1200))
     c = 0
     cwd = os.getcwd()
-    partialpath = '{}/{}'.format(cwd, 'temporary')
+    partialpath = '{}/mysite/{}'.format(cwd, 'temporary')
     for i in range(0,1200,size):
         for j in range(0,1200,size):
-            path = partialpath + '/{}_{}.jpg'.format('teste', c)
+            path = partialpath + '/{}_{}.jpg'.format(model.id, c)
             img = Image.open(path)
             img = img.resize((size,size))
             I1 = ImageDraw.Draw(img)
             position = ((size/2) - 30, size - 35)
-            #text = model.cellList[c].name   
-            text = 'engenheiros do hawaii - toda forma de poder'
+            text = model.cellList[c].name   
             c = c + 1
             lenghtText = len(text)
-            print(lenghtText)
             pixels = (10 * len(text))
             x = (size - pixels) / 2
             position = (0, size - 35)
@@ -67,9 +64,8 @@ def createImg():
             I1.rectangle((left-5, top-5, right+5, bottom+5), fill="black")
             I1.text(position, text, font=font,fill =(255, 255, 255),align="center"),
             new.paste(img, (j,i))
-    filename = partialpath + "/{}_collage.pdf".format('teste')
-    new.save(filename)
-    new.show()
+    filename = partialpath + "/{}_collage.pdf".format(model.id)
+    new.save(filename)    
     return filename
 
 def getSize(size):
